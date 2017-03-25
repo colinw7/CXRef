@@ -1,31 +1,31 @@
-enum CXRefObjectType {
-  OBJECT_CALL  = 0,
-  OBJECT_BLOCK = 1
+enum class CXRefObjectType {
+  CALL  = 0,
+  BLOCK = 1
 };
 
-enum CXRefBlockType {
-  CODE_BLOCK     = 0,
-  FUNCTION_BLOCK = 1,
-  DECISION_BLOCK = 2,
-  IF_BLOCK       = 3,
-  ELIF_BLOCK     = 4,
-  ELSE_BLOCK     = 5,
-  SWITCH_BLOCK   = 6,
-  WHILE_BLOCK    = 7,
-  DO_BLOCK       = 8,
-  FOR_BLOCK      = 9
+enum class CXRefBlockType {
+  CODE     = 0,
+  FUNCTION = 1,
+  DECISION = 2,
+  IF       = 3,
+  ELIF     = 4,
+  ELSE     = 5,
+  SWITCH   = 6,
+  WHILE    = 7,
+  DO       = 8,
+  FOR      = 9
 };
 
-enum CXRefStorageClassType {
-  CLASS_AUTOMATIC = 0,
-  CLASS_EXTERNAL  = 1,
-  CLASS_STATIC    = 2
+enum class CXRefStorageClassType {
+  AUTOMATIC = 0,
+  EXTERNAL  = 1,
+  STATIC    = 2
 };
 
-enum CXRefQualifierType {
-  QUALIFIER_NONE     = 0,
-  QUALIFIER_CONSTANT = 1,
-  QUALIFIER_VOLATILE = 2
+enum class CXRefQualifierType {
+  NONE     = 0,
+  CONSTANT = 1,
+  VOLATILE = 2
 };
 
 struct CXRefFunc {

@@ -27,7 +27,7 @@ static CXRefTokenP                  last_token;
 static CXRefTokenP                  last_str_token;
 static bool                         lines_available       = true;
 static uint                         print_depth           = 0;
-static CXRefComment                *current_comment       = NULL;
+static CXRefComment                *current_comment       = nullptr;
 static std::vector<CXRefComment *>  comment_list;
 static bool                         force_space_before    = false;
 static bool                         force_space_after     = false;
@@ -84,7 +84,7 @@ CXRefReadToken()
     cxref_control.char_no   = ctoken->char_no;
 
     switch (ctoken->type) {
-      case CTOKEN_IDENTIFIER:
+      case CXRefCTokenType::IDENTIFIER:
         if (CXRefIsKeywordString(ctoken->str))
           token = CXRefCreateToken(KEYWORD   , ctoken->str);
         else
@@ -92,26 +92,26 @@ CXRefReadToken()
 
         token_done = true;
 
-        current_comment = NULL;
+        current_comment = nullptr;
 
         break;
-      case CTOKEN_NUMERIC:
-      case CTOKEN_CHARACTER:
+      case CXRefCTokenType::NUMERIC:
+      case CXRefCTokenType::CHARACTER:
         token = CXRefCreateToken(CONSTANT, ctoken->str);
 
         token_done = true;
 
-        current_comment = NULL;
+        current_comment = nullptr;
 
         break;
-      case CTOKEN_STRING: {
+      case CXRefCTokenType::STRING: {
         std::string str = CXRefIdToString(ctoken->str);
 
         uint len1 = str.size();
 
         CXRefCTokenP ctoken1 = CXRefUnstackCToken();
 
-        while (ctoken1.isValid() && ctoken1->type == CTOKEN_STRING) {
+        while (ctoken1.isValid() && ctoken1->type == CXRefCTokenType::STRING) {
           std::string str1 = CXRefIdToString(ctoken1->str);
 
           uint len2 = str1.size();
@@ -135,29 +135,29 @@ CXRefReadToken()
 
         token_done = true;
 
-        current_comment = NULL;
+        current_comment = nullptr;
 
         break;
       }
-      case CTOKEN_OPERATOR:
+      case CXRefCTokenType::OPERATOR:
         token = CXRefCreateToken(OPERATOR, ctoken->str);
 
         token_done = true;
 
-        current_comment = NULL;
+        current_comment = nullptr;
 
         break;
-      case CTOKEN_SEPARATOR:
+      case CXRefCTokenType::SEPARATOR:
         token = CXRefCreateToken(SEPARATOR, ctoken->str);
 
         token_done = true;
 
-        current_comment = NULL;
+        current_comment = nullptr;
 
         break;
-      case CTOKEN_COMMENT_ALL:
-      case CTOKEN_COMMENT_START:
-        if (current_comment == NULL || current_comment->file != ctoken->file ||
+      case CXRefCTokenType::COMMENT_ALL:
+      case CXRefCTokenType::COMMENT_START:
+        if (! current_comment || current_comment->file != ctoken->file ||
             (ctoken->line_no - current_comment->line_no) > 1) {
           current_comment = new CXRefComment;
 
@@ -199,7 +199,7 @@ CXRefReadToken()
         }
 
         break;
-      case CTOKEN_COMMENT_CONTINUED: {
+      case CXRefCTokenType::COMMENT_CONTINUED: {
         std::string str = CXRefIdToString(current_comment->str);
 
         std::string str1 = CXRefIdToString(ctoken->str);
@@ -211,7 +211,7 @@ CXRefReadToken()
 
         break;
       }
-      case CTOKEN_COMMENT_END: {
+      case CXRefCTokenType::COMMENT_END: {
         std::string str = CXRefIdToString(current_comment->str);
 
         std::string str1 = CXRefIdToString(ctoken->str);
@@ -271,7 +271,7 @@ CXRefGetCurrentSplitter(CXRefTokenP token, int start_line, int end_line, char *s
 
   CXRefGetTokenStart(token, file, &line_no, &char_no);
 
-  CXRefComment *comment = NULL;
+  CXRefComment *comment = nullptr;
 
   CXRefStringId file_id = CXRefStringToId(file);
 
@@ -308,14 +308,14 @@ CXRefGetCurrentSplitter(CXRefTokenP token, int start_line, int end_line, char *s
     comment = comment1;
   }
 
-  if (comment == NULL)
+  if (! comment)
     return CXRefEmptyStrId;
 
   comment->used = true;
 
   *splitter = true;
 
-  CXRefComment *comment2 = NULL;
+  CXRefComment *comment2 = nullptr;
 
   for (uint i = 0; i <= num; i++) {
     CXRefComment *comment1 = comment_list[i];
@@ -352,7 +352,7 @@ CXRefGetCurrentSplitter(CXRefTokenP token, int start_line, int end_line, char *s
     break;
   }
 
-  if (comment2 == NULL)
+  if (! comment2)
     return CXRefEmptyStrId;
 
   return comment2->str;
@@ -367,7 +367,7 @@ CXRefGetCurrentComment(CXRefTokenP token)
 
   CXRefGetTokenStart(token, file, &line_no, &char_no);
 
-  CXRefComment *comment = NULL;
+  CXRefComment *comment = nullptr;
 
   CXRefStringId file_id = CXRefStringToId(file);
 
@@ -388,10 +388,10 @@ CXRefGetCurrentComment(CXRefTokenP token)
     comment->used = true;
   }
 
-  if (comment != NULL)
+  if (comment)
     return comment->str;
-  else
-    return CXRefEmptyStrId;
+
+  return CXRefEmptyStrId;
 }
 
 CXRefTokenP

@@ -130,11 +130,11 @@ CXRefFilePrototypes(const std::string &filename)
     std::string str = CXRefIdToString((*pprototypes1)->name);
 
     for (uint j = 0; j < (*pprototypes1)->types.size(); j++) {
-      if      ((*pprototypes1)->types[j] == ARG_INPUT)
+      if      ((*pprototypes1)->types[j] == CXRefProtoArgType::INPUT)
         str += " i";
-      else if ((*pprototypes1)->types[j] == ARG_OUTPUT)
+      else if ((*pprototypes1)->types[j] == CXRefProtoArgType::OUTPUT)
         str += " o";
-      else if ((*pprototypes1)->types[j] == ARG_BOTH)
+      else if ((*pprototypes1)->types[j] == CXRefProtoArgType::BOTH)
         str += " b";
       else
         str += " i";
@@ -197,14 +197,14 @@ CXRefAddPrototypeArgs(CXRefStringId name, std::vector<CXRefStringId> &args)
 
     std::string arg_str = CXRefIdToString(args[i]);
 
-    CXRefProtoArgType type = ARG_INPUT;
+    CXRefProtoArgType type = CXRefProtoArgType::INPUT;
 
     if      (arg_str[0] == 'i')
-      type = ARG_INPUT;
+      type = CXRefProtoArgType::INPUT;
     else if (arg_str[0] == 'o')
-      type = ARG_OUTPUT;
+      type = CXRefProtoArgType::OUTPUT;
     else if (arg_str[0] == 'b')
-      type = ARG_BOTH;
+      type = CXRefProtoArgType::BOTH;
     else
       std::cerr << "Illegal Prototype Argument Type " <<
                    CStrUtil::single_quote(arg_str) << " for " << name << std::endl;
@@ -268,7 +268,7 @@ CXRefProtoArgType
 CXRefGetPrototypeArgType(CXRefProtoP prototype, uint arg_no)
 {
   if (prototype->dummy)
-    return ARG_UNKNOWN;
+    return CXRefProtoArgType::UNKNOWN;
 
   if (arg_no < 1 || arg_no > prototype->types.size()) {
     if (arg_no < 1 || ! prototype->varargs)
@@ -276,7 +276,7 @@ CXRefGetPrototypeArgType(CXRefProtoP prototype, uint arg_no)
                    prototype->name << " with " <<
                    prototype->types.size() << " Args" << std::endl;
 
-    return ARG_UNKNOWN;
+    return CXRefProtoArgType::UNKNOWN;
   }
 
   return prototype->types[arg_no - 1];

@@ -405,14 +405,14 @@ CPreProIncludeCommand(CPreProFile *pre_pro_file)
 
   const std::string &line = pre_pro_file->lines[pre_pro_file->line_num - 1];
 
-  CXRefIncludeFileType type = CXREF_INCLUDE_SYSTEM;
+  CXRefIncludeFileType type = CXRefIncludeFileType::SYSTEM;
 
   /* Process '<' filename '>' */
 
   std::string filename;
 
   if      (line[pre_pro_file->char_num] == '<') {
-    type = CXREF_INCLUDE_SYSTEM;
+    type = CXRefIncludeFileType::SYSTEM;
 
     /* Skip '<' */
 
@@ -453,7 +453,7 @@ CPreProIncludeCommand(CPreProFile *pre_pro_file)
   /* Process '"' filename '"' */
 
   else if (line[pre_pro_file->char_num] == '"') {
-    type = CXREF_INCLUDE_USER;
+    type = CXRefIncludeFileType::USER;
 
     /* Skip '"' */
 
@@ -951,7 +951,7 @@ CPreProEndifCommand(CPreProFile *pre_pro_file)
 
   /* Get If Data */
 
-  CPreProIf *if_data = NULL;
+  CPreProIf *if_data = nullptr;
 
   if (! pre_pro_file->if_data_stack.empty()) {
     if_data = pre_pro_file->if_data_stack.back();
@@ -1133,7 +1133,8 @@ CPreProReplaceDefined(CPreProFile *pre_pro_file, const std::string &command,
   while (i < ctokens.size()) {
     CXRefCTokenP ctoken;
 
-    if (ctokens[i]->type != CTOKEN_IDENTIFIER || ctokens[i]->str == CXRefPreProDefinedStrId)
+    if (ctokens[i]->type != CXRefCTokenType::IDENTIFIER ||
+        ctokens[i]->str == CXRefPreProDefinedStrId)
       goto next;
 
     j = i + 1;
@@ -1143,10 +1144,10 @@ CPreProReplaceDefined(CPreProFile *pre_pro_file, const std::string &command,
       return false;
     }
 
-    if (ctokens[j]->type == CTOKEN_OPERATOR && ctokens[j]->str == CXRefLParenStrId) {
+    if (ctokens[j]->type == CXRefCTokenType::OPERATOR && ctokens[j]->str == CXRefLParenStrId) {
       j++;
 
-      if (ctokens[j]->type != CTOKEN_IDENTIFIER) {
+      if (ctokens[j]->type != CXRefCTokenType::IDENTIFIER) {
         CPreProError(pre_pro_file, "missing defined identifier for '%s'", command.c_str());
         return false;
       }
@@ -1155,13 +1156,13 @@ CPreProReplaceDefined(CPreProFile *pre_pro_file, const std::string &command,
 
       j++;
 
-      if (ctokens[j]->type != CTOKEN_OPERATOR || ctokens[j]->str == CXRefRParenStrId) {
+      if (ctokens[j]->type != CXRefCTokenType::OPERATOR || ctokens[j]->str == CXRefRParenStrId) {
         CPreProError(pre_pro_file, "missing defined close bracket for '%s'", command.c_str());
         return false;
       }
     }
     else {
-      if (ctokens[j]->type != CTOKEN_IDENTIFIER) {
+      if (ctokens[j]->type != CXRefCTokenType::IDENTIFIER) {
         CPreProError(pre_pro_file, "missing defined identifier for '%s'", command.c_str());
         return false;
       }
@@ -1177,9 +1178,9 @@ CPreProReplaceDefined(CPreProFile *pre_pro_file, const std::string &command,
        identifier is defined or not */
 
     if (CPreProDefine::isDefine(identifier))
-      ctoken = CXRefCreateCToken(CTOKEN_NUMERIC, "1", i);
+      ctoken = CXRefCreateCToken(CXRefCTokenType::NUMERIC, "1", i);
     else
-      ctoken = CXRefCreateCToken(CTOKEN_NUMERIC, "0", i);
+      ctoken = CXRefCreateCToken(CXRefCTokenType::NUMERIC, "0", i);
 
     ctokens1.clear();
 
@@ -1212,7 +1213,7 @@ CPreProProcessCTokens1(CPreProFile *pre_pro_file, bool continued, CPreProDefineP
                        std::vector<CXRefCTokenP> &ctokens)
 {
   for (uint i = 0; i < ctokens.size(); i++) {
-    if (ctokens[i]->type != CTOKEN_IDENTIFIER)
+    if (ctokens[i]->type != CXRefCTokenType::IDENTIFIER)
       continue;
 
     /* Get Define for Identifier */
@@ -1237,7 +1238,7 @@ CPreProProcessCTokens1(CPreProFile *pre_pro_file, bool continued, CPreProDefineP
   }
 
   for (uint i = 0; i < ctokens.size(); i++) {
-    if (ctokens[i]->type != CTOKEN_PRE_PRO_CONCAT)
+    if (ctokens[i]->type != CXRefCTokenType::PRE_PRO_CONCAT)
       continue;
 
     if (i == 0 || i == ctokens.size() - 1) {
@@ -1315,7 +1316,8 @@ CPreProReplaceFunctionIdentifier(CPreProFile *pre_pro_file, bool continued, CPre
   /* Ensure Identifier is Followed by '(' */
 
   if (*i + 1 >= ctokens.size() ||
-      ctokens[*i + 1]->type != CTOKEN_OPERATOR || ctokens[*i + 1]->str == CXRefLParenStrId)
+      ctokens[*i + 1]->type != CXRefCTokenType::OPERATOR ||
+      ctokens[*i + 1]->str == CXRefLParenStrId)
     return true;
 
   /*------------------*/
@@ -1340,7 +1342,7 @@ CPreProReplaceFunctionIdentifier(CPreProFile *pre_pro_file, bool continued, CPre
   j = *i + 2;
 
   while (j < ctokens.size()) {
-    if (ctokens[j]->type == CTOKEN_OPERATOR) {
+    if (ctokens[j]->type == CXRefCTokenType::OPERATOR) {
       if      (ctokens[j]->str == CXRefLParenStrId)
         brackets++;
       else if (ctokens[j]->str == CXRefRParenStrId) {
@@ -1426,13 +1428,13 @@ CPreProReplaceFunctionIdentifier(CPreProFile *pre_pro_file, bool continued, CPre
   uint k = 1;
 
   for (j = 0; j < ctoken_list2.size(); j++) {
-    if      (ctoken_list2[j]->type == CTOKEN_OPERATOR) {
+    if      (ctoken_list2[j]->type == CXRefCTokenType::OPERATOR) {
       if      (ctoken_list2[j]->str == CXRefLParenStrId)
         brackets++;
       else if (ctoken_list2[j]->str == CXRefRParenStrId)
         brackets--;
     }
-    else if (ctoken_list2[j]->type == CTOKEN_SEPARATOR &&
+    else if (ctoken_list2[j]->type == CXRefCTokenType::SEPARATOR &&
              ctoken_list2[j]->str  == CXRefCommaStrId &&
              brackets == 0) {
       k++;
@@ -1460,8 +1462,8 @@ CPreProReplaceFunctionIdentifier(CPreProFile *pre_pro_file, bool continued, CPre
   const std::vector<CXRefCTokenP> &define_ctokens = define->getCTokens();
 
   for (j = 0; j < define_ctokens.size(); j++) {
-    if (define_ctokens[j]->type != CTOKEN_IDENTIFIER &&
-        define_ctokens[j]->type != CTOKEN_PRE_PRO_IDENTIFIER) {
+    if (define_ctokens[j]->type != CXRefCTokenType::IDENTIFIER &&
+        define_ctokens[j]->type != CXRefCTokenType::PRE_PRO_IDENTIFIER) {
       ctoken_list2.push_back(define_ctokens[j]);
       continue;
     }
@@ -1477,9 +1479,11 @@ CPreProReplaceFunctionIdentifier(CPreProFile *pre_pro_file, bool continued, CPre
       continue;
     }
 
-    if (define_ctokens[j]->type == CTOKEN_IDENTIFIER) {
-      if ((j > 0                         && define_ctokens[j - 1]->type == CTOKEN_PRE_PRO_CONCAT) ||
-          (j < define_ctokens.size() - 1 && define_ctokens[j + 1]->type == CTOKEN_PRE_PRO_CONCAT))
+    if (define_ctokens[j]->type == CXRefCTokenType::IDENTIFIER) {
+      if ((j > 0                         &&
+           define_ctokens[j - 1]->type == CXRefCTokenType::PRE_PRO_CONCAT) ||
+          (j < define_ctokens.size() - 1 &&
+           define_ctokens[j + 1]->type == CXRefCTokenType::PRE_PRO_CONCAT))
         copy(identifier_ctoken_lists[k].begin(), identifier_ctoken_lists[k].end(),
              back_inserter(ctoken_list2));
       else {
@@ -1498,7 +1502,7 @@ CPreProReplaceFunctionIdentifier(CPreProFile *pre_pro_file, bool continued, CPre
 
       std::string str1 = CStrUtil::double_quote(str);
 
-      CXRefCTokenP ctoken = CXRefCreateCToken(CTOKEN_STRING, str1, *i);
+      CXRefCTokenP ctoken = CXRefCreateCToken(CXRefCTokenType::STRING, str1, *i);
 
       ctoken_list2.push_back(ctoken);
     }
@@ -1536,10 +1540,10 @@ CPreProEvaluateConstantExpression(CPreProFile *pre_pro_file, const std::string &
   std::string expression = "";
 
   for (uint i = 0; i < ctokens.size(); i++) {
-    if (ctokens[i]->type == CTOKEN_COMMENT_START ||
-        ctokens[i]->type == CTOKEN_COMMENT_CONTINUED ||
-        ctokens[i]->type == CTOKEN_COMMENT_END ||
-        ctokens[i]->type == CTOKEN_COMMENT_ALL)
+    if (ctokens[i]->type == CXRefCTokenType::COMMENT_START ||
+        ctokens[i]->type == CXRefCTokenType::COMMENT_CONTINUED ||
+        ctokens[i]->type == CXRefCTokenType::COMMENT_END ||
+        ctokens[i]->type == CXRefCTokenType::COMMENT_ALL)
       continue;
 
     expression += CXRefIdToString(ctokens[i]->str);
@@ -1606,7 +1610,7 @@ CPreProAnyNonComment(CPreProFile *pre_pro_file)
   uint num_ctokens = ctokens.size();
 
   for (uint i = 0; i < num_ctokens; i++)
-    if (ctokens[i]->type != CTOKEN_COMMENT_ALL)
+    if (ctokens[i]->type != CXRefCTokenType::COMMENT_ALL)
       return true;
 
   return false;

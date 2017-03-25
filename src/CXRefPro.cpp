@@ -95,7 +95,7 @@ CXRefFileToCTokens(const std::string &filename, std::vector<CXRefCTokenP> &ctoke
   cxref_control.line_no   = 0;
 
   for (uint i = 0; i < num_lines; ++i, ++cxref_control.line_no) {
-    CXRefFileDataMgr::FileData *file_data = NULL;
+    CXRefFileDataMgr::FileData *file_data = nullptr;
 
     if (lines[i].substr(0, 8) == "#pragma ") {
       std::vector<std::string> words;
@@ -145,7 +145,7 @@ CXRefFileToCTokens(const std::string &filename, std::vector<CXRefCTokenP> &ctoke
 
     copy(ctoken_list1.begin(), ctoken_list1.end(), back_inserter(ctoken_list));
 
-    if (file_data != NULL)
+    if (file_data)
       file_data->line_list.push_back(lines[i]);
   }
 }

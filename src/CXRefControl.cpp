@@ -419,4 +419,3 @@ CXRefControl()
   output_html        = false;
   skip_code          = false;
 }
-

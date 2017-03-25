@@ -6,32 +6,32 @@
 #include <CRefPtr.h>
 #include <string>
 
-enum CXRefIncludeFileType {
-  CXREF_INCLUDE_SYSTEM,
-  CXREF_INCLUDE_USER
+enum class CXRefIncludeFileType {
+  SYSTEM,
+  USER
 };
 
 typedef CRefPtr<CFile> CFileP;
 
 struct CXRefControl {
-  bool                     trace;
-  bool                     tokenise;
+  bool                     trace { false };
+  bool                     tokenise { false };
   CFileP                   output_fp;
   CXRefStringId            toplevel_file_name;
   CXRefStringId            file_name;
-  uint                     line_no;
-  uint                     char_no;
-  bool                     print_defines;
-  bool                     prototypes;
-  char                     split_char;
-  bool                     compress;
-  bool                     ansi_proto;
-  bool                     skip_includes;
-  bool                     show_proto_names;
-  bool                     show_external;
-  bool                     show_internal;
-  bool                     output_html;
-  bool                     skip_code;
+  uint                     line_no { 0 };
+  uint                     char_no { 0 };
+  bool                     print_defines { false };
+  bool                     prototypes { false };
+  char                     split_char { '\0' };
+  bool                     compress { false };
+  bool                     ansi_proto { false };
+  bool                     skip_includes { false };
+  bool                     show_proto_names { false };
+  bool                     show_external { false };
+  bool                     show_internal { false };
+  bool                     output_html { false };
+  bool                     skip_code { false };
   std::string              proto_file;
   std::vector<std::string> include_path_list;
 

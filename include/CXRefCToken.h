@@ -3,27 +3,28 @@
 
 #include <CRefPtr.h>
 
-enum CXRefCTokenType {
-  CTOKEN_COMMENT_START,
-  CTOKEN_COMMENT_CONTINUED,
-  CTOKEN_COMMENT_END,
-  CTOKEN_COMMENT_ALL,
-  CTOKEN_IDENTIFIER,
-  CTOKEN_NUMERIC,
-  CTOKEN_CHARACTER,
-  CTOKEN_STRING,
-  CTOKEN_OPERATOR,
-  CTOKEN_SEPARATOR,
-  CTOKEN_PRE_PRO_IDENTIFIER,
-  CTOKEN_PRE_PRO_CONCAT
+enum class CXRefCTokenType {
+  NONE,
+  COMMENT_START,
+  COMMENT_CONTINUED,
+  COMMENT_END,
+  COMMENT_ALL,
+  IDENTIFIER,
+  NUMERIC,
+  CHARACTER,
+  STRING,
+  OPERATOR,
+  SEPARATOR,
+  PRE_PRO_IDENTIFIER,
+  PRE_PRO_CONCAT
 };
 
 struct CXRefCToken {
-  CXRefCTokenType type;
+  CXRefCTokenType type { CXRefCTokenType::NONE };
   CXRefStringId   str;
   CXRefStringId   file;
-  uint            line_no;
-  uint            char_no;
+  uint            line_no { 0 };
+  uint            char_no { 0 };
 };
 
 typedef CRefPtr<CXRefCToken> CXRefCTokenP;

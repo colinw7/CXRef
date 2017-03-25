@@ -13,7 +13,7 @@ void
 CXRefStringToCTokens(const std::string &str, uint *i,
                      std::vector<CXRefCTokenP> &ctoken_list, bool *in_comment)
 {
-  bool in_comment1 = (in_comment != NULL ? *in_comment : false);
+  bool in_comment1 = (in_comment ? *in_comment : false);
 
   uint len = str.size();
 
@@ -55,7 +55,7 @@ CXRefStringToCTokens(const std::string &str, uint *i,
 
     ctoken_list.push_back(ctoken);
 
-    if (ctoken->type == CTOKEN_COMMENT_ALL) {
+    if (ctoken->type == CXRefCTokenType::COMMENT_ALL) {
       const std::string &comment_str = CXRefIdToString(ctoken->str);
 
       std::string::size_type pos1 = comment_str.find("LOCALVARS:");
@@ -80,7 +80,7 @@ CXRefStringToCTokens(const std::string &str, uint *i,
     }
   }
 
-  if (in_comment != NULL)
+  if (in_comment)
     *in_comment = in_comment1;
 
   *i = j;
@@ -118,21 +118,21 @@ CXRefGetCommentToken(const std::string &str, uint *i, bool *in_comment)
   if (! CStrUtil::readCComment(str, i, &new_in_comment, comment_str))
     return CXRefCTokenP();
 
-  CXRefCTokenP ctoken = CXRefCreateCToken(CTOKEN_COMMENT_ALL, "", *i);
+  CXRefCTokenP ctoken = CXRefCreateCToken(CXRefCTokenType::COMMENT_ALL, "", *i);
 
   ctoken->str = CXRefStringToId(comment_str);
 
   if (*in_comment) {
     if (new_in_comment)
-      ctoken->type = CTOKEN_COMMENT_CONTINUED;
+      ctoken->type = CXRefCTokenType::COMMENT_CONTINUED;
     else
-      ctoken->type = CTOKEN_COMMENT_END;
+      ctoken->type = CXRefCTokenType::COMMENT_END;
   }
   else {
     if (new_in_comment)
-      ctoken->type = CTOKEN_COMMENT_START;
+      ctoken->type = CXRefCTokenType::COMMENT_START;
     else
-      ctoken->type = CTOKEN_COMMENT_ALL;
+      ctoken->type = CXRefCTokenType::COMMENT_ALL;
   }
 
   *in_comment = new_in_comment;
@@ -175,7 +175,7 @@ CXRefGetNumericToken(const std::string &str, uint *i)
   if (! CStrUtil::readCNumber(str, i, numeric_str))
     return CXRefCTokenP();
 
-  CXRefCTokenP ctoken = CXRefCreateCToken(CTOKEN_NUMERIC, "", *i);
+  CXRefCTokenP ctoken = CXRefCreateCToken(CXRefCTokenType::NUMERIC, "", *i);
 
   ctoken->str = CXRefStringToId(numeric_str);
 
@@ -196,7 +196,7 @@ CXRefGetCharacterToken(const std::string &str, uint *i)
   if (! CStrUtil::readCCharacter(str, i, char_str))
     return CXRefCTokenP();
 
-  CXRefCTokenP ctoken = CXRefCreateCToken(CTOKEN_CHARACTER, "", *i);
+  CXRefCTokenP ctoken = CXRefCreateCToken(CXRefCTokenType::CHARACTER, "", *i);
 
   ctoken->str = CXRefStringToId(char_str);
 
@@ -217,7 +217,7 @@ CXRefGetStringToken(const std::string &str, uint *i)
   if (! CStrUtil::readCString(str, i, c_str))
     return CXRefCTokenP();
 
-  CXRefCTokenP ctoken = CXRefCreateCToken(CTOKEN_STRING, "", *i);
+  CXRefCTokenP ctoken = CXRefCreateCToken(CXRefCTokenType::STRING, "", *i);
 
   ctoken->str = CXRefStringToId(c_str);
 
@@ -238,7 +238,7 @@ CXRefGetIdentifierToken(const std::string &str, uint *i)
   if (! CStrUtil::readCIdentifier(str, i, identifier_str))
     return CXRefCTokenP();
 
-  CXRefCTokenP ctoken = CXRefCreateCToken(CTOKEN_IDENTIFIER, "", *i);
+  CXRefCTokenP ctoken = CXRefCreateCToken(CXRefCTokenType::IDENTIFIER, "", *i);
 
   ctoken->str = CXRefStringToId(identifier_str);
 
@@ -259,7 +259,7 @@ CXRefGetOperatorToken(const std::string &str, uint *i)
   if (! CStrUtil::readCOperator(str, i, operator_str))
     return CXRefCTokenP();
 
-  CXRefCTokenP ctoken = CXRefCreateCToken(CTOKEN_OPERATOR, "", *i);
+  CXRefCTokenP ctoken = CXRefCreateCToken(CXRefCTokenType::OPERATOR, "", *i);
 
   ctoken->str = CXRefStringToId(operator_str);
 
@@ -280,7 +280,7 @@ CXRefGetSeparatorToken(const std::string &str, uint *i)
   if (! CStrUtil::readCSeparator(str, i, separator_str))
     return CXRefCTokenP();
 
-  CXRefCTokenP ctoken = CXRefCreateCToken(CTOKEN_SEPARATOR, "", *i);
+  CXRefCTokenP ctoken = CXRefCreateCToken(CXRefCTokenType::SEPARATOR, "", *i);
 
   ctoken->str = CXRefStringToId(separator_str);
 
@@ -305,12 +305,12 @@ CXRefGetPreProcessorToken(const std::string &str, uint *i)
   if      (CXRefIsIdentifierToken(str, j)) {
     ctoken = CXRefGetIdentifierToken(str, &j);
 
-    ctoken->type = CTOKEN_PRE_PRO_IDENTIFIER;
+    ctoken->type = CXRefCTokenType::PRE_PRO_IDENTIFIER;
   }
   else if (str[j] == '#') {
     ++j;
 
-    ctoken = CXRefCreateCToken(CTOKEN_PRE_PRO_CONCAT, "", *i);
+    ctoken = CXRefCreateCToken(CXRefCTokenType::PRE_PRO_CONCAT, "", *i);
 
     ctoken->str = CXRefStringToId("##");
   }
@@ -346,18 +346,19 @@ void
 CXRefPrintCToken(CXRefCTokenP ctoken)
 {
   switch (ctoken->type) {
-    case CTOKEN_COMMENT_START     : std::cout << "Comment Start "; break;
-    case CTOKEN_COMMENT_CONTINUED : std::cout << "Comment Continued "; break;
-    case CTOKEN_COMMENT_END       : std::cout << "Comment End "; break;
-    case CTOKEN_COMMENT_ALL       : std::cout << "Comment All "; break;
-    case CTOKEN_IDENTIFIER        : std::cout << "Identifier "; break;
-    case CTOKEN_NUMERIC           : std::cout << "Numeric "; break;
-    case CTOKEN_CHARACTER         : std::cout << "Character "; break;
-    case CTOKEN_STRING            : std::cout << "String "; break;
-    case CTOKEN_OPERATOR          : std::cout << "Operator "; break;
-    case CTOKEN_SEPARATOR         : std::cout << "Separator "; break;
-    case CTOKEN_PRE_PRO_IDENTIFIER: std::cout << "Pre-Pro Identifier "; break;
-    case CTOKEN_PRE_PRO_CONCAT    : std::cout << "Pre-Pro Concat "; break;
+    case CXRefCTokenType::COMMENT_START     : std::cout << "Comment Start "; break;
+    case CXRefCTokenType::COMMENT_CONTINUED : std::cout << "Comment Continued "; break;
+    case CXRefCTokenType::COMMENT_END       : std::cout << "Comment End "; break;
+    case CXRefCTokenType::COMMENT_ALL       : std::cout << "Comment All "; break;
+    case CXRefCTokenType::IDENTIFIER        : std::cout << "Identifier "; break;
+    case CXRefCTokenType::NUMERIC           : std::cout << "Numeric "; break;
+    case CXRefCTokenType::CHARACTER         : std::cout << "Character "; break;
+    case CXRefCTokenType::STRING            : std::cout << "String "; break;
+    case CXRefCTokenType::OPERATOR          : std::cout << "Operator "; break;
+    case CXRefCTokenType::SEPARATOR         : std::cout << "Separator "; break;
+    case CXRefCTokenType::PRE_PRO_IDENTIFIER: std::cout << "Pre-Pro Identifier "; break;
+    case CXRefCTokenType::PRE_PRO_CONCAT    : std::cout << "Pre-Pro Concat "; break;
+    default                                 : std::cout << "??"; break;
   }
 
   if (ctoken->str != CXRefEmptyStrId)
