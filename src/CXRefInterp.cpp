@@ -305,7 +305,6 @@ CXRefReadGenToken(CXRefTokenType type, bool required)
  *  external-declaration
  *  translation-unit external-declaration
  */
-
 CXRefTokenP
 CXRefReadTranslationUnit(bool /*required*/)
 {
@@ -345,7 +344,6 @@ CXRefReadTranslationUnit(bool /*required*/)
  *  function-declaration
  *  declaration
  */
-
 CXRefTokenP
 CXRefReadExternalDeclaration(bool required)
 {
@@ -538,7 +536,6 @@ CXRefReadExternalDeclaration(bool required)
  *  declaration-specifiers(opt) declarator
  *    init-declaration-list(opt) compound-statement
  */
-
 CXRefTokenP
 CXRefReadFunctionDefinition(bool required)
 {
@@ -603,7 +600,6 @@ CXRefReadFunctionDefinition(bool required)
  *    declarations for the parameter names, no initialisation and
  *    only register storage class.
  */
-
 bool
 CXRefCheckFunctionDefinition(CXRefTokenP token)
 {
@@ -640,7 +636,6 @@ CXRefCheckFunctionDefinition(CXRefTokenP token)
  * declaration:
  *  declaration-specifiers init-declarator-list(opt)
  */
-
 CXRefTokenP
 CXRefReadDeclaration(bool required)
 {
@@ -705,7 +700,6 @@ CXRefReadDeclaration(bool required)
  *  type-specifier declaration-specifiers(opt)
  *  type-qualifier declaration-specifiers(opt)
  */
-
 CXRefTokenP
 CXRefReadDeclarationSpecifiers(bool required)
 {
@@ -812,7 +806,6 @@ CXRefReadDeclarationSpecifiers1(bool required)
  *  declaration
  *  declaration-list declaration
  */
-
 CXRefTokenP
 CXRefReadDeclarationList(bool required)
 {
@@ -858,7 +851,6 @@ CXRefReadDeclarationList(bool required)
  *  'extern'
  *  'typedef'
  */
-
 CXRefTokenP
 CXRefReadStorageClassSpecifier(bool required)
 {
@@ -893,7 +885,6 @@ CXRefReadStorageClassSpecifier(bool required)
  * typedef-name:
  *  identifier
  */
-
 CXRefTokenP
 CXRefReadTypedefName(bool /*required*/)
 {
@@ -937,7 +928,6 @@ CXRefReadTypedefName(bool /*required*/)
  *  enum-specifier
  *  typedef-name
  */
-
 CXRefTokenP
 CXRefReadTypeSpecifier(bool required)
 {
@@ -1009,7 +999,6 @@ CXRefReadTypeSpecifier(bool required)
  *  'enum' identifier(opt) '{' enumerator-list '}'
  *  'enum' identifier
  */
-
 CXRefTokenP
 CXRefReadEnumSpecifier(bool required)
 {
@@ -1115,7 +1104,6 @@ CXRefReadEnumSpecifier(bool required)
  *  enumerator
  *  enumerator-list ',' enumerator
  */
-
 CXRefTokenP
 CXRefReadEnumeratorList(bool required)
 {
@@ -1167,7 +1155,6 @@ CXRefReadEnumeratorList(bool required)
  *  identifier
  *  identifier '=' constant-expression
  */
-
 CXRefTokenP
 CXRefReadEnumerator(bool required)
 {
@@ -1212,7 +1199,6 @@ CXRefReadEnumerator(bool required)
  *  init-declarator
  *  init-declarator-list ',' init-declarator
  */
-
 CXRefTokenP
 CXRefReadInitDeclaratorList(bool required)
 {
@@ -1264,7 +1250,6 @@ CXRefReadInitDeclaratorList(bool required)
  *  declarator
  *  declarator '=' initializer
  */
-
 CXRefTokenP
 CXRefReadInitDeclarator(bool required)
 {
@@ -1312,7 +1297,6 @@ CXRefReadInitDeclarator(bool required)
  *  direct-declarator '(' parameter-type-list ')'
  *  direct-declarator '(' identifier-list(opt) ')'
  */
-
 CXRefTokenP
 CXRefReadDirectDeclarator(bool required)
 {
@@ -1470,7 +1454,6 @@ CXRefReadDirectDeclarator(bool required)
  *  'const'
  *  'volatile'
  */
-
 CXRefTokenP
 CXRefReadTypeQualifier(bool required)
 {
@@ -1506,7 +1489,6 @@ CXRefReadTypeQualifier(bool required)
  *  'struct'
  *  'union'
  */
-
 CXRefTokenP
 CXRefReadStructOrUnion(bool required)
 {
@@ -1543,7 +1525,6 @@ CXRefReadStructOrUnion(bool required)
  *  struct-declaration
  *  struct-declaration-list struct-declaration
  */
-
 CXRefTokenP
 CXRefReadStructDeclarationList(bool required)
 {
@@ -1586,7 +1567,6 @@ CXRefReadStructDeclarationList(bool required)
  *  struct-declarator
  *  struct-declarator-list ',' struct-declarator
  */
-
 CXRefTokenP
 CXRefReadStructDeclaratorList(bool required)
 {
@@ -1638,7 +1618,6 @@ CXRefReadStructDeclaratorList(bool required)
  *  declarator
  *  declarator(opt) ':' constant-expression
  */
-
 CXRefTokenP
 CXRefReadStructDeclarator(bool required)
 {
@@ -1693,7 +1672,6 @@ CXRefReadStructDeclarator(bool required)
  *  struct-or-union identifier(opt) '{' struct-declaration-list '}'
  *  struct-or-union identifier
  */
-
 CXRefTokenP
 CXRefReadStructOrUnionSpecifier(bool required)
 {
@@ -1790,7 +1768,6 @@ CXRefReadStructOrUnionSpecifier(bool required)
  * struct-declaration:
  *  specifier-qualifier-list struct-declarator-list
  */
-
 CXRefTokenP
 CXRefReadStructDeclaration(bool required)
 {
@@ -1840,7 +1817,6 @@ CXRefReadStructDeclaration(bool required)
  *  type-specifier specifier-qualifier-list(opt)
  *  type-qualifier specifier-qualifier-list(opt)
  */
-
 CXRefTokenP
 CXRefReadSpecifierQualifierList(bool required)
 {
@@ -1922,7 +1898,6 @@ CXRefReadSpecifierQualifierList1(bool required)
  * declarator:
  *  pointer(opt) direct-declarator
  */
-
 CXRefTokenP
 CXRefReadDeclarator(bool required)
 {
@@ -1955,7 +1930,6 @@ CXRefReadDeclarator(bool required)
  *  '*' type-qualifier-list(opt)
  *  '*' type-qualifier-list(opt) pointer
  */
-
 CXRefTokenP
 CXRefReadPointer(bool required)
 {
@@ -1996,7 +1970,6 @@ CXRefReadPointer(bool required)
  *  type-qualifier
  *  type-qualifier-list type-qualifier
  */
-
 CXRefTokenP
 CXRefReadTypeQualifierList(bool required)
 {
@@ -2039,7 +2012,6 @@ CXRefReadTypeQualifierList(bool required)
  *  parameter-list
  *  parameter-list ',' '...'
  */
-
 CXRefTokenP
 CXRefReadParameterTypeList(bool required)
 {
@@ -2094,7 +2066,6 @@ CXRefReadParameterTypeList(bool required)
  *  parameter-declaration
  *  parameter-list ',' parameter-declaration
  */
-
 CXRefTokenP
 CXRefReadParameterList(bool required)
 {
@@ -2146,7 +2117,6 @@ CXRefReadParameterList(bool required)
  *  declaration-specifiers declarator
  *  declaration-specifiers abstract-declarator(opt)
  */
-
 CXRefTokenP
 CXRefReadParameterDeclaration(bool required)
 {
@@ -2274,7 +2244,6 @@ CXRefReadParameterDeclaration(bool required)
  *  identifier
  *  identifier-list ',' identifier
  */
-
 CXRefTokenP
 CXRefReadIdentifierList(bool required)
 {
@@ -2338,7 +2307,6 @@ CXRefReadIdentifierList(bool required)
  *  '{' initializer-list '}'
  *  '{' initializer-list ',' '}'
  */
-
 CXRefTokenP
 CXRefReadInitializer(bool required)
 {
@@ -2423,7 +2391,6 @@ CXRefReadInitializer(bool required)
  *  initializer
  *  initializer-list ',' initializer
  */
-
 CXRefTokenP
 CXRefReadInitializerList(bool required)
 {
@@ -2474,7 +2441,6 @@ CXRefReadInitializerList(bool required)
  * type-name:
  *  specifier-qualifier-list abstract-declarator
  */
-
 CXRefTokenP
 CXRefReadTypeName(bool required)
 {
@@ -2505,7 +2471,6 @@ CXRefReadTypeName(bool required)
  *  pointer
  *  pointer(opt) direct-abstract-declarator
  */
-
 CXRefTokenP
 CXRefReadAbstractDeclarator(bool required)
 {
@@ -2546,7 +2511,6 @@ CXRefReadAbstractDeclarator(bool required)
  *  direct-abstract-declarator '[' constant-expression(opt) ']'
  *  direct-abstract-declarator '(' parameter-type-list(opt) ')'
  */
-
 CXRefTokenP
 CXRefReadDirectAbstractDeclarator(bool required)
 {
@@ -2703,7 +2667,6 @@ CXRefReadDirectAbstractDeclarator(bool required)
  *  iteration-statement
  *  jump-statement
  */
-
 CXRefTokenP
 CXRefReadStatement(bool required)
 {
@@ -2738,7 +2701,6 @@ CXRefReadStatement(bool required)
  *  'case' constant-expression ':' statement
  *  'default' ':' statement
  */
-
 CXRefTokenP
 CXRefReadLabeledStatement(bool required)
 {
@@ -2861,7 +2823,6 @@ CXRefReadLabeledStatement(bool required)
  * expression-statement:
  *  expression(opt) ';'
  */
-
 CXRefTokenP
 CXRefReadExpressionStatement(bool required)
 {
@@ -2924,7 +2885,6 @@ CXRefReadExpressionStatement(bool required)
  * compound-statement:
  *  '{' declaration-list(opt) statement-list(opt) '}'
  */
-
 CXRefTokenP
 CXRefReadCompoundStatement(bool required)
 {
@@ -2991,7 +2951,6 @@ CXRefReadCompoundStatement(bool required)
  *  statement
  *  statement-list statement
  */
-
 CXRefTokenP
 CXRefReadStatementList(bool required)
 {
@@ -3035,7 +2994,6 @@ CXRefReadStatementList(bool required)
  *  'if' '(' expression ')' statement 'else' statement
  *  'switch' '(' expression ')' statement
  */
-
 CXRefTokenP
 CXRefReadSelectionStatement(bool required)
 {
@@ -3206,7 +3164,6 @@ CXRefReadSelectionStatement(bool required)
  *  'do' statement 'while' '(' expression ')' ';'
  *  'for' '(' expression(opt) ';' expression(opt) ';' expression(opt) ')' statement
  */
-
 CXRefTokenP
 CXRefReadIterationStatement(bool required)
 {
@@ -3482,7 +3439,6 @@ CXRefReadIterationStatement(bool required)
  *  'break' ';'
  *  'return' expression(opt) ';'
  */
-
 CXRefTokenP
 CXRefReadJumpStatement(bool required)
 {
@@ -3607,7 +3563,6 @@ CXRefReadJumpStatement(bool required)
  * constant-expression:
  *  conditional-expression
  */
-
 CXRefTokenP
 CXRefReadConstantExpression(bool required)
 {
@@ -3635,7 +3590,6 @@ CXRefReadConstantExpression(bool required)
  *  assignment-expression
  *  expression ',' assignment-expression
  */
-
 CXRefTokenP
 CXRefReadExpression(bool required)
 {
@@ -3686,7 +3640,6 @@ CXRefReadExpression(bool required)
  * assignment-operator:
  *  '=' '*=' '/=' '%=' '+=' '-=' '<<=' '>>=' '&=' '^=' '|='
  */
-
 CXRefTokenP
 CXRefReadAssignmentOperator(bool required)
 {
@@ -3732,7 +3685,6 @@ CXRefReadAssignmentOperator(bool required)
  *  conditional-expression
  *  unary-expression assignment-operator assignment-expression
  */
-
 CXRefTokenP
 CXRefReadAssignmentExpression(bool required)
 {
@@ -3813,7 +3765,6 @@ CXRefReadAssignmentExpression(bool required)
  *  logical-or-expression
  *  logical-or-expression '?' expression ':' conditional-expression
  */
-
 CXRefTokenP
 CXRefReadConditionalExpression(bool required)
 {
@@ -3883,7 +3834,6 @@ CXRefReadConditionalExpression(bool required)
  *  logical-and-expression
  *  logical-or-expression '||' logical-and-expression
  */
-
 CXRefTokenP
 CXRefReadLogicalOrExpression(bool required)
 {
@@ -3935,7 +3885,6 @@ CXRefReadLogicalOrExpression(bool required)
  *  inclusive-or-expression
  *  logical-and-expression '&&' inclusive-or-expression
  */
-
 CXRefTokenP
 CXRefReadLogicalAndExpression(bool required)
 {
@@ -3987,7 +3936,6 @@ CXRefReadLogicalAndExpression(bool required)
  *  exclusive-or-expression
  *  inclusive-or-expression '|' exclusive-or-expression
  */
-
 CXRefTokenP
 CXRefReadInclusiveOrExpression(bool required)
 {
@@ -4039,7 +3987,6 @@ CXRefReadInclusiveOrExpression(bool required)
  *  and-expression
  *  exclusive-or-expression '^' and-expression
  */
-
 CXRefTokenP
 CXRefReadExclusiveOrExpression(bool required)
 {
@@ -4091,7 +4038,6 @@ CXRefReadExclusiveOrExpression(bool required)
  *  equality-expression
  *  and-expression '&' equality-expression
  */
-
 CXRefTokenP
 CXRefReadAndExpression(bool required)
 {
@@ -4144,7 +4090,6 @@ CXRefReadAndExpression(bool required)
  *  equality-expression '==' relational-expression
  *  equality-expression '!=' relational-expression
  */
-
 CXRefTokenP
 CXRefReadEqualityExpression(bool required)
 {
@@ -4200,7 +4145,6 @@ CXRefReadEqualityExpression(bool required)
  *  relational-expression '<=' shift-expression
  *  relational-expression '>=' shift-expression
  */
-
 CXRefTokenP
 CXRefReadRelationalExpression(bool required)
 {
@@ -4256,7 +4200,6 @@ CXRefReadRelationalExpression(bool required)
  *  shift-expression '<<' additive-expression
  *  shift-expression '>>' additive-expression
  */
-
 CXRefTokenP
 CXRefReadShiftExpression(bool required)
 {
@@ -4310,7 +4253,6 @@ CXRefReadShiftExpression(bool required)
  *  additive-expression '+' multiplicative-expression
  *  additive-expression '-' multiplicative-expression
  */
-
 CXRefTokenP
 CXRefReadAdditiveExpression(bool required)
 {
@@ -4365,7 +4307,6 @@ CXRefReadAdditiveExpression(bool required)
  *  multiplicative-expression '/' cast-expression
  *  multiplicative-expression '%' cast-expression
  */
-
 CXRefTokenP
 CXRefReadMultiplicativeExpression(bool required)
 {
@@ -4419,7 +4360,6 @@ CXRefReadMultiplicativeExpression(bool required)
  *  unary-expression
  *  '(' type-name ')' cast-expression
  */
-
 CXRefTokenP
 CXRefReadCastExpression(bool required)
 {
@@ -4498,7 +4438,6 @@ CXRefReadCastExpression(bool required)
  * unary-operator:
  *  '&' '*' '+' '-' '~' '!'
  */
-
 CXRefTokenP
 CXRefReadUnaryOperator(bool required)
 {
@@ -4544,7 +4483,6 @@ CXRefReadUnaryOperator(bool required)
  *  'sizeof' unary-expression
  *  'sizeof' '(' type-name ')'
  */
-
 CXRefTokenP
 CXRefReadUnaryExpression(bool required)
 {
@@ -4692,7 +4630,6 @@ CXRefReadUnaryExpression(bool required)
  *  postfix-expression '++'
  *  postfix-expression '--'
  */
-
 CXRefTokenP
 CXRefReadPostfixExpression(bool required)
 {
@@ -4848,7 +4785,6 @@ CXRefReadPostfixExpression(bool required)
  *  string
  *  '(' expression ')'
  */
-
 CXRefTokenP
 CXRefReadPrimaryExpression(bool required)
 {
@@ -4928,7 +4864,6 @@ CXRefReadPrimaryExpression(bool required)
  *  assignment-expression
  *  argument-expression-list ',' assignment-expression
  */
-
 CXRefTokenP
 CXRefReadArgumentExpressionList(bool required)
 {
