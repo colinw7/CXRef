@@ -885,11 +885,11 @@ CXRefSetFunctionOldParameterList(CXRefBlock *block, CXRefTokenP identifier_list,
           CXRefStorageClassType storage_class;
           CXRefQualifierType    type_qualifier;
 
-          CXRefStringId str =
+          CXRefStringId str1 =
             CXRefGetTypeString(declaration_specifiers, pointer, direct_declarator,
                                &storage_class, &type_qualifier);
 
-          block->vars[k]->type = CXRefCreateType(str);
+          block->vars[k]->type = CXRefCreateType(str1);
         }
       }
     }
@@ -987,10 +987,10 @@ CXRefProcessCompoundStatement(CXRefBlock *block, CXRefTokenP compound_statement)
 
       CXRefGetTokenEnd(compound_statement, end_file, &end_line_no, &end_char_no);
 
-      CXRefStringId comment =
+      CXRefStringId comment1 =
         CXRefGetCurrentSplitter(statements[i], start_line_no, end_line_no, &splitters[i]);
 
-      comments.push_back(comment);
+      comments.push_back(comment1);
     }
 
     uint i = 0;
@@ -1107,10 +1107,10 @@ CXRefProcessStatement(CXRefBlock *block, CXRefTokenP statement)
 
     CXRefGetTokenChildren(child, children1);
 
-    CXRefTokenP statement;
+    CXRefTokenP sstatement;
 
     if      (children1.size() == 5 && CXRefIsToken(children1[0], KEYWORD, CXRefIfStrId)) {
-      statement = children1[4];
+      sstatement = children1[4];
 
       CXRefBlock *sub_block = CXRefStartNewBlock(block, CXRefBlockType::IF, children1[3]);
 
@@ -1124,7 +1124,7 @@ CXRefProcessStatement(CXRefBlock *block, CXRefTokenP statement)
 
       CXRefProcessExpression(sub_block, children1[2]);
 
-      CXRefProcessConstructStatement(sub_block, statement);
+      CXRefProcessConstructStatement(sub_block, sstatement);
     }
     else if (children1.size() == 7 && CXRefIsToken(children1[0], KEYWORD, CXRefIfStrId)) {
       if (cxref_if_else_data)
@@ -1134,7 +1134,7 @@ CXRefProcessStatement(CXRefBlock *block, CXRefTokenP statement)
 
       CXRefTokenP expression = children1[2];
 
-      statement = children1[4];
+      sstatement = children1[4];
 
       CXRefBlock *sub_block  = CXRefStartNewBlock(block, CXRefBlockType::DECISION, CXRefTokenP());
       CXRefBlock *sub_block1 = CXRefStartNewBlock(sub_block, CXRefBlockType::IF, children1[3]);
@@ -1144,11 +1144,11 @@ CXRefProcessStatement(CXRefBlock *block, CXRefTokenP statement)
 
       CXRefProcessExpression(sub_block1, expression);
 
-      CXRefProcessConstructStatement(sub_block1, statement);
+      CXRefProcessConstructStatement(sub_block1, sstatement);
 
-      statement = children1[6];
+      sstatement = children1[6];
 
-      CXRefProcessElseIfStatement(sub_block, statement, children1[5]);
+      CXRefProcessElseIfStatement(sub_block, sstatement, children1[5]);
 
       uint num = cxref_if_else_data->blocks.size();
 
@@ -1205,7 +1205,7 @@ CXRefProcessStatement(CXRefBlock *block, CXRefTokenP statement)
         cxref_if_else_data = nullptr;
     }
     else if (children1.size() == 5 && CXRefIsToken(children1[0], KEYWORD, CXRefSwitchStrId)) {
-      statement = children1[4];
+      sstatement = children1[4];
 
       CXRefBlock *sub_block = CXRefStartNewBlock(block, CXRefBlockType::SWITCH, children1[3]);
 
@@ -1219,7 +1219,7 @@ CXRefProcessStatement(CXRefBlock *block, CXRefTokenP statement)
 
       CXRefProcessExpression(sub_block, children1[2]);
 
-      CXRefProcessConstructStatement(sub_block, statement);
+      CXRefProcessConstructStatement(sub_block, sstatement);
     }
   }
   else if (CXRefIsTokenType(child, ITERATION_STATEMENT)) {
@@ -1227,10 +1227,10 @@ CXRefProcessStatement(CXRefBlock *block, CXRefTokenP statement)
 
     CXRefGetTokenChildren(child, children1);
 
-    CXRefTokenP statement;
+    CXRefTokenP istatement;
 
     if      (children1.size() == 5 && CXRefIsToken(children1[0], KEYWORD, CXRefWhileStrId)) {
-      statement = children1[4];
+      istatement = children1[4];
 
       CXRefBlock *sub_block = CXRefStartNewBlock(block, CXRefBlockType::WHILE, children1[3]);
 
@@ -1244,10 +1244,10 @@ CXRefProcessStatement(CXRefBlock *block, CXRefTokenP statement)
 
       CXRefProcessExpression(sub_block, children1[2]);
 
-      CXRefProcessConstructStatement(sub_block, statement);
+      CXRefProcessConstructStatement(sub_block, istatement);
     }
     else if (children1.size() == 7 && CXRefIsToken(children1[0], KEYWORD, CXRefDoStrId)) {
-      statement = children1[1];
+      istatement = children1[1];
 
       CXRefBlock *sub_block = CXRefStartNewBlock(block, CXRefBlockType::DO, children1[0]);
 
@@ -1259,13 +1259,13 @@ CXRefProcessStatement(CXRefBlock *block, CXRefTokenP statement)
         sub_block->gen_comment = true;
       }
 
-      CXRefProcessConstructStatement(sub_block, statement);
+      CXRefProcessConstructStatement(sub_block, istatement);
 
       CXRefProcessExpression(sub_block, children1[4]);
     }
     else if ((children1.size() >= 6 && children1.size() <= 9) &&
              CXRefIsToken(children1[0], KEYWORD, CXRefForStrId)) {
-      statement = children1[children1.size() - 1];
+      istatement = children1[children1.size() - 1];
 
       int i = 2;
 
@@ -1309,7 +1309,7 @@ CXRefProcessStatement(CXRefBlock *block, CXRefTokenP statement)
       if (expr2.isValid())
         CXRefProcessExpression(sub_block, expr2);
 
-      CXRefProcessConstructStatement(sub_block, statement);
+      CXRefProcessConstructStatement(sub_block, istatement);
 
       if (expr3.isValid())
         CXRefProcessExpression(sub_block, expr3);
@@ -1659,33 +1659,33 @@ CXRefAddFunctionCall(CXRefBlock *block, CXRefTokenP identifier,
 
     if (prototype.isValid()) {
       for (uint i = 0; i < assignment_expressions.size(); i++) {
-        CXRefTokenP identifier = CXRefGetVariableName(assignment_expressions[i]);
+        CXRefTokenP identifier1 = CXRefGetVariableName(assignment_expressions[i]);
 
-        if (! identifier.isValid())
+        if (! identifier1.isValid())
           continue;
 
         CXRefProtoArgType type = CXRefGetPrototypeArgType(prototype, i + 1);
 
         if      (type == CXRefProtoArgType::INPUT)
-          CXRefAddIdentifierReferenced(block, identifier);
+          CXRefAddIdentifierReferenced(block, identifier1);
         else if (type == CXRefProtoArgType::OUTPUT)
-          CXRefAddIdentifierModified  (block, identifier);
+          CXRefAddIdentifierModified  (block, identifier1);
         else if (type == CXRefProtoArgType::BOTH) {
-          CXRefAddIdentifierReferenced(block, identifier);
-          CXRefAddIdentifierModified  (block, identifier);
+          CXRefAddIdentifierReferenced(block, identifier1);
+          CXRefAddIdentifierModified  (block, identifier1);
         }
         else
-          CXRefAddIdentifierReferenced(block, identifier);
+          CXRefAddIdentifierReferenced(block, identifier1);
       }
     }
     else {
       for (uint i = 0; i < assignment_expressions.size(); i++) {
-        CXRefTokenP identifier = CXRefGetVariableName(assignment_expressions[i]);
+        CXRefTokenP identifier1 = CXRefGetVariableName(assignment_expressions[i]);
 
-        if (! identifier.isValid())
+        if (! identifier1.isValid())
           continue;
 
-        CXRefAddIdentifierReferenced(block, identifier);
+        CXRefAddIdentifierReferenced(block, identifier1);
       }
 
       std::cerr << "No prototype found for " << call->name << std::endl;
@@ -3165,9 +3165,9 @@ CXRefCreateCall(CXRefTokenP identifier, std::vector<CXRefTokenP> &assignment_exp
 
     CXRefGetAllTokenChildrenForFunction(assignment_expressions[i], CXRefRemoveCasts, children);
 
-    std::string name = CXRefTokensToString(children);
+    std::string name1 = CXRefTokensToString(children);
 
-    call->args.push_back(CXRefStringToId(name));
+    call->args.push_back(CXRefStringToId(name1));
   }
 
   return call;

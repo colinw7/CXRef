@@ -1,13 +1,6 @@
 #include <CGlob.h>
 
 class CPreProDefine {
- private:
-  CXRefStringId              identifier_;
-  CXRefStringId              str_;
-  bool                       function_;
-  std::vector<CXRefStringId> identifiers_;
-  std::vector<CXRefCTokenP>  ctokens_;
-
  public:
   CPreProDefine(const std::string &identifier, const std::string &str);
   CPreProDefine(const std::string &identifier, bool functiom,
@@ -16,6 +9,8 @@ class CPreProDefine {
  ~CPreProDefine();
 
   CXRefStringId getIdentifier() const { return identifier_; }
+
+  CXRefStringId getStr() const { return str_; }
 
   bool isFunction() const { return function_; }
 
@@ -62,6 +57,13 @@ class CPreProDefine {
   static bool isDefine(CXRefStringId identifier);
 
   static CRefPtr<CPreProDefine> getDefine(CXRefStringId identifier);
+
+ private:
+  CXRefStringId              identifier_;
+  CXRefStringId              str_;
+  bool                       function_;
+  std::vector<CXRefStringId> identifiers_;
+  std::vector<CXRefCTokenP>  ctokens_;
 };
 
 typedef CRefPtr<CPreProDefine> CPreProDefineP;

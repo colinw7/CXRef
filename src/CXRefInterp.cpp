@@ -1408,17 +1408,16 @@ CXRefReadDirectDeclarator(bool required)
           }
         }
         else {
-          CXRefTokenP token2 = CXRefReadIdentifierList(false);
+          CXRefTokenP token2_1 = CXRefReadIdentifierList(false);
+          CXRefTokenP token3_1 = CXRefReadToken();
 
-          CXRefTokenP token3 = CXRefReadToken();
-
-          if (CXRefIsToken(token3, OPERATOR, CXRefRParenStrId)) {
+          if (CXRefIsToken(token3_1, OPERATOR, CXRefRParenStrId)) {
             CXRefTokenP token4 = CXRefCreateToken(DIRECT_DECLARATOR);
 
-            CXRefAddTokenChild(token , token4);
-            CXRefAddTokenChild(token1, token4);
-            CXRefAddTokenChild(token2, token4);
-            CXRefAddTokenChild(token3, token4);
+            CXRefAddTokenChild(token   , token4);
+            CXRefAddTokenChild(token1  , token4);
+            CXRefAddTokenChild(token2_1, token4);
+            CXRefAddTokenChild(token3_1, token4);
 
             token = token4;
           }
@@ -1428,8 +1427,8 @@ CXRefReadDirectDeclarator(bool required)
             if (required)
               CXRefError(CXRefGetLastError());
 
-            CXRefRestackToken(token3);
-            CXRefRestackToken(token2);
+            CXRefRestackToken(token3_1);
+            CXRefRestackToken(token2_1);
             CXRefRestackToken(token1);
 
             break;
@@ -2373,12 +2372,12 @@ CXRefReadInitializer(bool required)
     else {
       CXRefRestackToken(token1);
 
-      CXRefTokenP token1 = CXRefReadAssignmentExpression(required);
+      CXRefTokenP token1_1 = CXRefReadAssignmentExpression(required);
 
-      if (token1.isValid()) {
+      if (token1_1.isValid()) {
         token = CXRefCreateToken(INITIALIZER);
 
-        CXRefAddTokenChild(token1, token);
+        CXRefAddTokenChild(token1_1, token);
       }
     }
   }
@@ -2543,27 +2542,25 @@ CXRefReadDirectAbstractDeclarator(bool required)
         }
       }
       else {
-        CXRefTokenP token2 = CXRefReadParameterTypeList(false);
+        CXRefTokenP token2_1 = CXRefReadParameterTypeList(false);
+        CXRefTokenP token3_1 = CXRefReadToken();
 
-        CXRefTokenP token3 = CXRefReadToken();
-
-        if (CXRefIsToken(token3, OPERATOR, CXRefRParenStrId)) {
+        if (CXRefIsToken(token3_1, OPERATOR, CXRefRParenStrId)) {
           token = CXRefCreateToken(DIRECT_ABSTRACT_DECLARATOR);
 
-          CXRefAddTokenChild(token1, token);
-          CXRefAddTokenChild(token2, token);
-          CXRefAddTokenChild(token3, token);
+          CXRefAddTokenChild(token1  , token);
+          CXRefAddTokenChild(token2_1, token);
+          CXRefAddTokenChild(token3_1, token);
         }
         else {
-          CXRefRestackToken(token3);
-          CXRefRestackToken(token2);
+          CXRefRestackToken(token3_1);
+          CXRefRestackToken(token2_1);
           CXRefRestackToken(token1);
         }
       }
     }
     else if (CXRefIsToken(token1, OPERATOR, CXRefLBracketStrId)) {
       CXRefTokenP token2 = CXRefReadConstantExpression(false);
-
       CXRefTokenP token3 = CXRefReadToken();
 
       if (CXRefIsToken(token3, OPERATOR, CXRefRBracketStrId)) {
@@ -4409,24 +4406,24 @@ CXRefReadCastExpression(bool required)
       else {
         CXRefRestackToken(token1);
 
-        CXRefTokenP token1 = CXRefReadUnaryExpression(false);
+        CXRefTokenP token1_1 = CXRefReadUnaryExpression(false);
 
-        if (token1.isValid()) {
+        if (token1_1.isValid()) {
           token = CXRefCreateToken(CAST_EXPRESSION);
 
-          CXRefAddTokenChild(token1, token);
+          CXRefAddTokenChild(token1_1, token);
         }
       }
     }
     else {
       CXRefRestackToken(token1);
 
-      CXRefTokenP token1 = CXRefReadUnaryExpression(false);
+      CXRefTokenP token1_1 = CXRefReadUnaryExpression(false);
 
-      if (token1.isValid()) {
+      if (token1_1.isValid()) {
         token = CXRefCreateToken(CAST_EXPRESSION);
 
-        CXRefAddTokenChild(token1, token);
+        CXRefAddTokenChild(token1_1, token);
       }
     }
   }

@@ -1,5 +1,5 @@
 typedef void *CXRefStringId;
 
 struct CXRefCToken;
-struct CPreProDefine;
+class  CPreProDefine;
 struct CXRefToken;
