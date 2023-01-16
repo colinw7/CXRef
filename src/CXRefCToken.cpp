@@ -15,7 +15,7 @@ CXRefStringToCTokens(const std::string &str, uint *i,
 {
   bool in_comment1 = (in_comment ? *in_comment : false);
 
-  uint len = str.size();
+  uint len = uint(str.size());
 
   uint j = *i;
 
@@ -61,7 +61,7 @@ CXRefStringToCTokens(const std::string &str, uint *i,
       std::string::size_type pos1 = comment_str.find("LOCALVARS:");
 
       if (pos1 != std::string::npos) {
-        uint pos = pos1 + 10;
+        uint pos = uint(pos1 + 10);
 
         CStrUtil::skipSpace(comment_str, &pos);
 
@@ -91,7 +91,7 @@ CXRefCTokenListToString(const std::vector<CXRefCTokenP> &ctoken_list, const std:
 {
   std::string str;
 
-  uint num = ctoken_list.size();
+  uint num = uint(ctoken_list.size());
 
   for (uint i = 0; i < num; i++) {
     if (i > 0 && separator != "") str += separator;
@@ -290,7 +290,7 @@ CXRefGetSeparatorToken(const std::string &str, uint *i)
 bool
 CXRefIsPreProcessorToken(const std::string &str, uint i)
 {
-  uint len = str.size();
+  uint len = uint(str.size());
 
   return (i < len && str[i] == '#');
 }

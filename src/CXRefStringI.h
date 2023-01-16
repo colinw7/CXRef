@@ -1,5 +1,5 @@
-#define CXRefUndefStrId ((CXRefStringId) 0)
-#define CXRefEmptyStrId ((CXRefStringId) 1)
+#define CXRefUndefStrId CXRefStringId(0)
+#define CXRefEmptyStrId CXRefStringId(1)
 
 extern CXRefStringId CXRefAutoStrId;
 extern CXRefStringId CXRefBreakStrId;

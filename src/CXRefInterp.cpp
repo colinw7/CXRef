@@ -5329,7 +5329,7 @@ CXRefPrintTypedefs(const std::string &filename)
 */
 
     if (filename_id != CXRefEmptyStrId) {
-      int num_files = def->file_list.size();
+      int num_files = int(def->file_list.size());
 
       int j = 0;
 
@@ -5394,14 +5394,14 @@ CXRefRestackToken(CXRefTokenP token)
 
   CXRefGetBaseTokenChildren(token, children);
 
-  for (int i = children.size() - 1; i >= 0; i--)
+  for (int i = int(children.size() - 1); i >= 0; i--)
     CXRefStackToken(children[i]);
 }
 
 bool
 CXRefIsValidTypeTokens(CXRefTokenP token)
 {
-  int num_tokens = cxref_type_tokens.size();
+  int num_tokens = int(cxref_type_tokens.size());
 
   if (num_tokens == 0)
     return true;

@@ -78,7 +78,7 @@ bool
 CPreProDefineMgr::
 isIgnoreDefine(CXRefStringId id)
 {
-  uint num = ignore_define_list_.size();
+  uint num = uint(ignore_define_list_.size());
 
   if (num > 0) {
     const std::string &name = CXRefIdToString(id);
@@ -95,7 +95,7 @@ bool
 CPreProDefineMgr::
 isIncludeDefine(CXRefStringId id)
 {
-  uint num = include_define_list_.size();
+  uint num = uint(include_define_list_.size());
 
   if (num > 0) {
     const std::string &name = CXRefIdToString(id);
@@ -190,7 +190,7 @@ debug_print(std::ostream &os) const
   if (function_) {
     os << '(';
 
-    uint num_identifiers = identifiers_.size();
+    uint num_identifiers = uint(identifiers_.size());
 
     for (uint i = 0; i < num_identifiers; ++i) {
       if (i > 0) os << ',';
@@ -215,7 +215,7 @@ print(std::ostream &os) const
   if (function_) {
     os << "(";
 
-    uint num_identifiers = identifiers_.size();
+    uint num_identifiers = uint(identifiers_.size());
 
     for (uint i = 0; i < num_identifiers; ++i) {
       if (i > 0) os << ", ";
@@ -226,7 +226,7 @@ print(std::ostream &os) const
     os << ")";
   }
 
-  uint num_ctokens = ctokens_.size();
+  uint num_ctokens = uint(ctokens_.size());
 
   for (uint i = 0; i < num_ctokens; ++i)
     os << " " << CStrUtil::single_quote(CXRefIdToString(ctokens_[i]->str));

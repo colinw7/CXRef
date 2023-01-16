@@ -27,7 +27,7 @@ CXRefReadPrototypes(const std::string &filename)
 
   file.toLines(lines);
 
-  uint num_lines = lines.size();
+  uint num_lines = uint(lines.size());
 
   for (uint i = 0; i < num_lines; i++) {
     std::vector<std::string> words;
@@ -61,7 +61,7 @@ CXRefReadPrototypes(const std::string &filename)
     else {
       std::vector<std::string> words1;
 
-      slice_vector(words, 1U, words.size() - 1, words1);
+      slice_vector(words, 1U, uint(words.size() - 1), words1);
 
       CXRefAddPrototypeArgs(words[0], words1);
     }
@@ -87,7 +87,7 @@ CXRefGetPrototypeIncludeFile(const std::string &name, std::string &name1)
 
   CStrUtil::addWords(path, paths);
 
-  uint num_paths = paths.size();
+  uint num_paths = uint(paths.size());
 
   uint i;
 
@@ -118,7 +118,7 @@ CXRefFilePrototypes(const std::string &filename)
 
   CFile file(filename);
 
-  int num = prototype_include_list.size();
+  int num = int(prototype_include_list.size());
 
   for (int i = 0; i < num; i++)
     file.printf("#include %s\n", CXRefIdToCStr(prototype_include_list[i]));
@@ -165,7 +165,7 @@ CXRefAddPrototypeArgs(const std::string &name, std::vector<std::string> &args)
 {
   CXRefStringId name_id = CXRefStringToId(name);
 
-  int num_args = args.size();
+  int num_args = int(args.size());
 
   std::vector<CXRefStringId> arg_ids;
 

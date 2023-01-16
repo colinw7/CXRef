@@ -89,7 +89,7 @@ CXRefFileToCTokens(const std::string &filename, std::vector<CXRefCTokenP> &ctoke
 
   file.toLines(lines);
 
-  uint num_lines = lines.size();
+  uint num_lines = uint(lines.size());
 
   cxref_control.file_name = CXRefEmptyStrId;
   cxref_control.line_no   = 0;
@@ -109,7 +109,7 @@ CXRefFileToCTokens(const std::string &filename, std::vector<CXRefCTokenP> &ctoke
           cxref_control.toplevel_file_name = file_data->name;
 
         cxref_control.file_name = file_data->name;
-        cxref_control.line_no   = CStrUtil::toInteger(words[3]) - 2;
+        cxref_control.line_no   = uint(CStrUtil::toInteger(words[3]) - 2);
       }
 
       continue;
@@ -126,7 +126,7 @@ CXRefFileToCTokens(const std::string &filename, std::vector<CXRefCTokenP> &ctoke
           cxref_control.toplevel_file_name = file_data->name;
 
         cxref_control.file_name = file_data->name;
-        cxref_control.line_no   = CStrUtil::toInteger(words[0]) - 2;
+        cxref_control.line_no   = uint(CStrUtil::toInteger(words[0]) - 2);
       }
 
       continue;

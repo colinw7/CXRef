@@ -209,7 +209,7 @@ CXRefStringToId(const std::string &str)
   if (p != string_id_map.end())
     return (*p).second;
 
-  CXRefStringId id = ((CXRefStringId) string_id);
+  CXRefStringId id = CXRefStringId(string_id);
 
   string_id_map[str] = id;
   id_string_map[id ] = str;

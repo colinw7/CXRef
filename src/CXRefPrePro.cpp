@@ -160,7 +160,7 @@ CPreProReadIgnoreDefineFile()
 
   CStrUtil::addWords(ignore_define_file, files);
 
-  uint num_files = files.size();
+  uint num_files = uint(files.size());
 
   for (uint i = 0; i < num_files; ++i)
     CPreProProcessIgnoreDefineFile(files[i]);
@@ -177,14 +177,14 @@ CPreProProcessIgnoreDefineFile(const std::string &filename)
 
   file.toLines(lines);
 
-  uint num_lines = lines.size();
+  uint num_lines = uint(lines.size());
 
   for (uint i = 0; i < num_lines; ++i) {
     std::vector<std::string> words;
 
     CStrUtil::addWords(lines[i], words);
 
-    uint num_words = words.size();
+    uint num_words = uint(words.size());
 
     if (num_words <= 0)
       continue;
@@ -306,7 +306,7 @@ CPreProConcatLines(CPreProFile *pre_pro_file)
 
     /* Splice '\' terminated lines */
 
-    int len = line.size();
+    int len = int(line.size());
 
     while (len > 0 && line[len - 1] == '\\') {
       line = line.substr(0, len - 1);
@@ -318,7 +318,7 @@ CPreProConcatLines(CPreProFile *pre_pro_file)
 
       pre_pro_file->lines[pre_pro_file->line_num - 1] = "";
 
-      len = line.size();
+      len = int(line.size());
     }
   }
 }
@@ -340,7 +340,7 @@ CPreProProcessPreProLine(CPreProFile *pre_pro_file)
 
   uint i = pre_pro_file->char_num;
 
-  uint len = line.size();
+  uint len = uint(line.size());
 
   while (pre_pro_file->char_num < len &&
          ! isspace(line[pre_pro_file->char_num]))
@@ -387,7 +387,7 @@ CPreProProcessNormalLine(CPreProFile *pre_pro_file)
       return false;
   }
 
-  uint num_ctokens = ctokens.size();
+  uint num_ctokens = uint(ctokens.size());
 
   for (uint i = 0; i < num_ctokens; ++i)
     cxref_control.output_fp->printf("%s ", CXRefIdToCStr(ctokens[i]->str));
@@ -1273,7 +1273,7 @@ CPreProProcessCTokens1(CPreProFile *pre_pro_file, bool continued, CPreProDefineP
 
     ctokens = ctokens2;
 
-    i += ctokens1.size() - 2;
+    i += uint(ctokens1.size() - 2);
   }
 
   return true;
@@ -1304,7 +1304,7 @@ CPreProReplaceNormalIdentifier(CPreProFile *pre_pro_file, bool continued, CPrePr
 
   ctokens = ctokens2;
 
-  *i += ctokens1.size() - 1;
+  *i += uint(ctokens1.size() - 1);
 
   return true;
 }
@@ -1520,7 +1520,7 @@ CPreProReplaceFunctionIdentifier(CPreProFile *pre_pro_file, bool continued, CPre
 
   /*----------------*/
 
-  *i = ctoken_list1.size() - 1;
+  *i = uint(ctoken_list1.size() - 1);
 
   copy(ctoken_list3.begin(), ctoken_list3.end(), back_inserter(ctoken_list1));
 
@@ -1607,7 +1607,7 @@ CPreProAnyNonComment(CPreProFile *pre_pro_file)
   if (in_comment)
     return true;
 
-  uint num_ctokens = ctokens.size();
+  uint num_ctokens = uint(ctokens.size());
 
   for (uint i = 0; i < num_ctokens; i++)
     if (ctokens[i]->type != CXRefCTokenType::COMMENT_ALL)

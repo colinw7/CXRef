@@ -107,14 +107,14 @@ CXRefReadToken()
       case CXRefCTokenType::STRING: {
         std::string str = CXRefIdToString(ctoken->str);
 
-        uint len1 = str.size();
+        uint len1 = uint(str.size());
 
         CXRefCTokenP ctoken1 = CXRefUnstackCToken();
 
         while (ctoken1.isValid() && ctoken1->type == CXRefCTokenType::STRING) {
           std::string str1 = CXRefIdToString(ctoken1->str);
 
-          uint len2 = str1.size();
+          uint len2 = uint(str1.size());
 
           std::string str2;
 
@@ -183,7 +183,7 @@ CXRefReadToken()
         else {
           std::string str = CXRefIdToString(current_comment->str);
 
-          uint len1 = str.size();
+          uint len1 = uint(str.size());
 
           str[len1 - 2] = '\0';
 
@@ -275,7 +275,7 @@ CXRefGetCurrentSplitter(CXRefTokenP token, int start_line, int end_line, char *s
 
   CXRefStringId file_id = CXRefStringToId(file);
 
-  uint num = comment_list.size();
+  uint num = uint(comment_list.size());
 
   for (uint i = 0; i < num; i++) {
     CXRefComment *comment1 = comment_list[i];
@@ -371,7 +371,7 @@ CXRefGetCurrentComment(CXRefTokenP token)
 
   CXRefStringId file_id = CXRefStringToId(file);
 
-  uint num = comment_list.size();
+  uint num = uint(comment_list.size());
 
   for (uint i = 0; i < num; i++) {
     CXRefComment *comment1 = comment_list[i];
@@ -501,7 +501,7 @@ void
 CXRefTokenToString1(CXRefTokenP token, std::string &str)
 {
   if      (token->type == CAST_EXPRESSION) {
-    uint num = token->child_list.size();
+    uint num = uint(token->child_list.size());
 
     if (num == 4) {
       std::list<CXRefTokenP>::const_iterator pchild1 = token->child_list.begin();
@@ -671,7 +671,7 @@ CXRefPrintToken(CXRefTokenP token)
   }
 
   if (! token->child_list.empty()) {
-    uint num_children = token->child_list.size();
+    uint num_children = uint(token->child_list.size());
 
     if      (num_children == 1) {
       CXRefTokenP token1 = token->child_list.front();
@@ -781,7 +781,7 @@ CXRefIsToken(CXRefTokenP token, CXRefTokenType type, CXRefStringId str)
 int
 CXRefGetTokenNumChildren(CXRefTokenP token)
 {
-  return token->child_list.size();
+  return int(token->child_list.size());
 }
 
 void
@@ -942,7 +942,7 @@ CXRefCollapseToType(CXRefTokenP token, CXRefTokenType type)
   if (token->type == type)
     return token;
 
-  uint num_children = token->child_list.size();
+  uint num_children = uint(token->child_list.size());
 
   if (num_children != 1)
     return CXRefTokenP();

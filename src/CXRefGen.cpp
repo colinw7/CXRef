@@ -41,7 +41,7 @@ CXRefIPrint(const char *format, ...)
 void
 CXRefIPrint(const std::string &str)
 {
-  int len1 = str.size();
+  int len1 = int(str.size());
 
   for (int i = 0; i < len1; i++) {
     if (cxref_print_newline) {

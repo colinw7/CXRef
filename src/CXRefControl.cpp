@@ -318,7 +318,7 @@ CXRefAddTypedefs(const std::string &filename)
 
     CStrUtil::addWords(*pline1, words);
 
-    uint num_words = words.size();
+    uint num_words = uint(words.size());
 
     if (num_words == 2 && CStrUtil::casecmp(words[0], "include") == 0) {
       std::string filename1;

@@ -14,7 +14,7 @@ class CPreProDefine {
 
   bool isFunction() const { return function_; }
 
-  uint getNumIdentifiers() const { return identifiers_.size(); }
+  uint getNumIdentifiers() const { return uint(identifiers_.size()); }
 
   const std::vector<CXRefStringId> &getIdentifiers() const { return identifiers_; }
 

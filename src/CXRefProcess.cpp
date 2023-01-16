@@ -617,33 +617,33 @@ CXRefCompressBlocks(CXRefFunc *function)
 {
   CXRefObject *object = function->block->object_list.front();
 
-  CXRefBlock *block = (CXRefBlock *) object->data;
+  CXRefBlock *block = reinterpret_cast<CXRefBlock *>(object->data);
 
-  uint num_objects = block->object_list.size();
+  uint num_objects = uint(block->object_list.size());
 
   for (uint i = 0; i < num_objects; i++) {
     object = block->object_list[i];
 
     if (object->type == CXRefObjectType::BLOCK)
-      CXRefCompressBlock((CXRefBlock *) object->data);
+      CXRefCompressBlock(reinterpret_cast<CXRefBlock *>(object->data));
   }
 }
 
 void
 CXRefCompressBlock(CXRefBlock *block)
 {
-  uint num_objects = block->object_list.size();
+  uint num_objects = uint(block->object_list.size());
 
   for (uint i = 0; i < num_objects; i++) {
     CXRefObject *object = block->object_list[i];
 
     if (object->type == CXRefObjectType::BLOCK)
-      CXRefCompressBlock((CXRefBlock *) object->data);
+      CXRefCompressBlock(reinterpret_cast<CXRefBlock *>(object->data));
   }
 
   /*------------*/
 
-  num_objects = block->object_list.size();
+  num_objects = uint(block->object_list.size());
 
   if (num_objects != 1)
     return;
@@ -653,7 +653,7 @@ CXRefCompressBlock(CXRefBlock *block)
   if (object->type != CXRefObjectType::BLOCK)
     return;
 
-  CXRefBlock *block1 = (CXRefBlock *) object->data;
+  CXRefBlock *block1 = reinterpret_cast<CXRefBlock *>(object->data);
 
   if (block1->comment != CXRefEmptyStrId && ! block1->gen_comment &&
       block ->comment != CXRefEmptyStrId && ! block ->gen_comment)
@@ -1150,7 +1150,7 @@ CXRefProcessStatement(CXRefBlock *block, CXRefTokenP statement)
 
       CXRefProcessElseIfStatement(sub_block, sstatement, children1[5]);
 
-      uint num = cxref_if_else_data->blocks.size();
+      uint num = uint(cxref_if_else_data->blocks.size());
 
       bool single_comment = false;
 
@@ -1647,7 +1647,7 @@ CXRefAddFunctionCall(CXRefBlock *block, CXRefTokenP identifier,
 
   CXRefCall *call = CXRefCreateCall(identifier, assignment_expressions);
 
-  CXRefObject *object = CXRefCreateObject(CXRefObjectType::CALL, (char *) call);
+  CXRefObject *object = CXRefCreateObject(CXRefObjectType::CALL, reinterpret_cast<char *>(call));
 
   if (block)
     block->object_list.push_back(object);
@@ -2109,7 +2109,7 @@ CXRefGetFunctions(std::vector<CXRefFunc *> &functions)
 CXRefFunc *
 CXRefLookupFunction(CXRefStringId name)
 {
-  int num_functions = cxref_function_list.size();
+  int num_functions = int(cxref_function_list.size());
 
   for (int i = 0; i < num_functions; i++) {
     CXRefFunc *function = cxref_function_list[i];
@@ -2135,7 +2135,7 @@ CXRefPrintFunctionPrototypes(std::vector<CXRefFunc *> &functions)
   for (uint i = 0; i < functions.size(); i++) {
     std::string str = CXRefIdToString(functions[i]->returns->type->str);
 
-    int type_len = str.size();
+    int type_len = int(str.size());
 
     int len1 = type_len - 1;
 
@@ -2159,7 +2159,7 @@ CXRefPrintFunctionPrototypes(std::vector<CXRefFunc *> &functions)
 
     std::string name = CXRefIdToString(functions[i]->name);
 
-    int name_len = name.size();
+    int name_len = int(name.size());
 
     if (functions[i]->returns && functions[i]->returns->internal) {
       if (type_len    > itype_len   ) itype_len    = type_len;
@@ -2194,7 +2194,7 @@ CXRefPrintFunctionPrototypes(std::vector<CXRefFunc *> &functions)
 
     std::string return_type = CXRefIdToString(functions[i]->returns->type->str);
 
-    uint len = return_type.size();
+    uint len = uint(return_type.size());
 
     int len1 = len - 1;
 
@@ -2258,7 +2258,7 @@ CXRefPrintFunctionPrototypes(std::vector<CXRefFunc *> &functions)
       for (uint j = 0; j < functions[i]->block->vars.size(); j++) {
         std::string var_type = CXRefIdToString(functions[i]->block->vars[j]->type->str);
 
-        len = var_type.size();
+        len = uint(var_type.size());
 
         bool pointer = false;
 
@@ -2269,7 +2269,7 @@ CXRefPrintFunctionPrototypes(std::vector<CXRefFunc *> &functions)
             functions[i]->block->vars[j]->name != CXRefEmptyStrId) {
           std::string var_name = CXRefIdToString(functions[i]->block->vars[j]->name);
 
-          len += var_name.size();
+          len += uint(var_name.size());
 
           if (! pointer)
             len++;
@@ -2303,7 +2303,7 @@ CXRefPrintFunctionPrototypes(std::vector<CXRefFunc *> &functions)
 
         cxref_control.output_fp->printf("%s", var_type.c_str());
 
-        pos += var_type.size();
+        pos += int(var_type.size());
 
         if (cxref_control.show_proto_names &&
             functions[i]->block->vars[j]->name != CXRefEmptyStrId) {
@@ -2317,7 +2317,7 @@ CXRefPrintFunctionPrototypes(std::vector<CXRefFunc *> &functions)
 
           cxref_control.output_fp->printf("%s", var_name.c_str());
 
-          pos += var_name.size();
+          pos += int(var_name.size());
         }
 
         if (j < functions[i]->block->vars.size() - 1) {
@@ -2355,7 +2355,7 @@ CXRefPrintFunctionPrototypes(std::vector<CXRefFunc *> &functions)
 
     std::string return_type = CXRefIdToString(functions[i]->returns->type->str);
 
-    uint len = return_type.size();
+    uint len = uint(return_type.size());
 
     int len1 = len - 1;
 
@@ -2424,7 +2424,7 @@ CXRefPrintFunctionPrototypes(std::vector<CXRefFunc *> &functions)
       for (uint j = 0; j < functions[i]->block->vars.size(); j++) {
         std::string var_type = CXRefIdToString(functions[i]->block->vars[j]->type->str);
 
-        len = var_type.size();
+        len = uint(var_type.size());
 
         bool pointer = false;
 
@@ -2435,7 +2435,7 @@ CXRefPrintFunctionPrototypes(std::vector<CXRefFunc *> &functions)
             functions[i]->block->vars[j]->name != CXRefEmptyStrId) {
           std::string var_name = CXRefIdToString(functions[i]->block->vars[j]->name);
 
-          len += var_name.size();
+          len += uint(var_name.size());
 
           if (! pointer)
             len++;
@@ -2469,7 +2469,7 @@ CXRefPrintFunctionPrototypes(std::vector<CXRefFunc *> &functions)
 
         cxref_control.output_fp->printf("%s", var_type.c_str());
 
-        pos += var_type.size();
+        pos += int(var_type.size());
 
         if (cxref_control.show_proto_names &&
             functions[i]->block->vars[j]->name != CXRefEmptyStrId) {
@@ -2483,7 +2483,7 @@ CXRefPrintFunctionPrototypes(std::vector<CXRefFunc *> &functions)
 
           cxref_control.output_fp->printf("%s", var_name.c_str());
 
-          pos += var_name.size();
+          pos += int(var_name.size());
         }
 
         if (j < functions[i]->block->vars.size() - 1) {
@@ -2548,7 +2548,7 @@ CXRefPrintFunctionHeader(CXRefFunc *function)
 
     cxref_control.output_fp->printf(" *    %s", return_type.c_str());
 
-    int len1 = return_type.size();
+    int len1 = int(return_type.size());
 
     if (return_type[len1 - 1] != '*')
       cxref_control.output_fp->printf(" ");
@@ -2562,7 +2562,7 @@ CXRefPrintFunctionHeader(CXRefFunc *function)
 
   cxref_control.output_fp->printf(" *      %s(", name.c_str());
 
-  int start_pos = name.size() + 9;
+  int start_pos = int(name.size() + 9);
 
   int pos = start_pos;
 
@@ -2576,14 +2576,14 @@ CXRefPrintFunctionHeader(CXRefFunc *function)
       std::string var_type = CXRefIdToString(function->block->vars[i]->type->str);
       std::string var_name = CXRefIdToString(function->block->vars[i]->name);
 
-      int len1 = var_type.size();
+      int len1 = int(var_type.size());
 
       bool is_vararg = (function->block->vars[i]->type->str == CXRefEllipsisStrId);
 
       int len;
 
       if (! is_vararg) {
-        len = var_type.size() + var_name.size();
+        len = int(var_type.size() + var_name.size());
 
         if (var_type[len1 - 1] != '*')
           len++;
@@ -2637,7 +2637,7 @@ CXRefPrintFunctionHeader(CXRefFunc *function)
   int max_len = 0;
 
   if (! is_void_return)
-    max_len = name.size();
+    max_len = int(name.size());
 
   for (uint i = 0; i < function->block->vars.size(); i++) {
     if (is_void_args)
@@ -2648,7 +2648,7 @@ CXRefPrintFunctionHeader(CXRefFunc *function)
     if (function->block->vars[i]->type->str != CXRefEllipsisStrId) {
       std::string var_name = CXRefIdToString(function->block->vars[i]->name);
 
-      len = var_name.size();
+      len = int(var_name.size());
     }
     else
       len = 3;
@@ -2788,7 +2788,7 @@ CXRefPrintObjectVars(CXRefObject *object)
   if (object->type != CXRefObjectType::BLOCK)
     return;
 
-  CXRefBlock *block = (CXRefBlock *) object->data;
+  CXRefBlock *block = reinterpret_cast<CXRefBlock *>(object->data);
 
   if (block->comment != CXRefEmptyStrId)
     cxref_control.output_fp->printf("%s\n", CXRefIdToCStr(block->comment));
@@ -2867,7 +2867,7 @@ CXRefPrintObjectCalls(CXRefObject *object, CXRefFunc *function)
   if (object->type != CXRefObjectType::BLOCK)
     return;
 
-  CXRefBlock *block = (CXRefBlock *) object->data;
+  CXRefBlock *block = reinterpret_cast<CXRefBlock *>(object->data);
 
 /*
   if (block->comment != CXRefEmptyStrId)
@@ -2881,13 +2881,13 @@ CXRefPrintObjectCalls(CXRefObject *object, CXRefFunc *function)
     cxref_control.output_fp->printf(" { ");
 */
 
-  int num = block->object_list.size();
+  int num = int(block->object_list.size());
 
   for (int i = 0; i < num; i++) {
     CXRefObject *object1 = block->object_list[i];
 
     if (object1->type == CXRefObjectType::CALL) {
-      CXRefCall *call = (CXRefCall *) object1->data;
+      CXRefCall *call = reinterpret_cast<CXRefCall *>(object1->data);
 
 /*
       cxref_control.output_fp->printf("%s(%d)\n", call->name.c_str(), call->args.size());
@@ -2974,9 +2974,9 @@ void
 CXRefPrintObjectCFlow(CXRefObject *object)
 {
   if (object->type == CXRefObjectType::BLOCK)
-    CXRefPrintBlockCFlow((CXRefBlock *) object->data);
+    CXRefPrintBlockCFlow(reinterpret_cast<CXRefBlock *>(object->data));
   else {
-    CXRefCall *call = (CXRefCall *) object->data;
+    CXRefCall *call = reinterpret_cast<CXRefCall *>(object->data);
 
     CXRefIPrint("Call: ");
 
@@ -3126,7 +3126,7 @@ CXRefStartNewBlock(CXRefBlock *parent, CXRefBlockType type, CXRefTokenP token)
 
   block->comment = comment;
 
-  CXRefObject *object = CXRefCreateObject(CXRefObjectType::BLOCK, (void *) block);
+  CXRefObject *object = CXRefCreateObject(CXRefObjectType::BLOCK, reinterpret_cast<void *>(block));
 
   if (parent)
     parent->object_list.push_back(object);
